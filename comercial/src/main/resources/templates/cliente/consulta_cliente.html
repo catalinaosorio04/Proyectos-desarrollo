@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head th:replace="~{plantillas/principal :: head}"></head>
+<style>
+  .list-group-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+</style>
+
+<body>
+  <header th:replace="~{plantillas/principal :: header}"></header>
+  <div class="container py-4">
+    <div class="card bg-light">
+      <div class="card-header">
+        <h3 class="text-secondary" th:text="${titulo}"></h3>
+      </div>
+      <div class="card-body shadow-lg p-3">
+
+        <img th:if="${#strings.length(cliente.imagen) > 0}" th:src="@{/uploads/} + ${cliente.imagen}"
+          style="max-width: 20%" class="img-thumbnail rounded float-start" />
+
+        <ul class="list-group">
+          <li class="list-group-item"><b>Tipo identificación: </b><i th:text="${cliente.tipoIdentificacion}"></i></li>
+          <li class="list-group-item"><b>Identificación: </b><i th:text="${cliente.identificacion}"></i></li>
+          <li class="list-group-item"><b>Teléfono: </b><i th:text="${cliente.telefono}"></i></li>
+          <li class="list-group-item"><b>Dirección: </b><i th:text="${cliente.direccion}"></i></li>
+          <li class="list-group-item"><b>Nombre completo: </b><i th:text="${cliente.nombreCompleto}"></i></li>
+          <li class="list-group-item"><b>Fecha de ingreso: </b><i
+              th:text="${#dates.format(cliente.fechaIngreso, 'dd/MM/yyyy')}"></i></li>
+          <li class="list-group-item"><b>Correo electrónico: </b><i th:text="${cliente.correoElectronico}"></i></li>
+          <li class="list-group-item"><b>Capacidad de crédito: $</b><i
+              th:text="${#numbers.formatInteger(cliente.capacidadCredito, 1, 'COMMA')}"></i></li>
+        </ul>
+
+        <nav th:replace="~{plantillas/facturasdocumentos :: pager-two}"></nav>
+
+        <div class="text-right mt-3">
+          <a th:href="@{/comercial/clienteslistar}" class="btn btn-sm btn-light">&laquo; regresar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer th:replace="~{plantillas/principal :: footer}"></footer>
+</body>
+
+</html>

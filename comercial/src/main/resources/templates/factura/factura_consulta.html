@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{plantillas/principal :: head}"></head>
+<style>
+	.texto-sub-li {
+		font-size: 1.2em;
+		background-color: rgb(240, 241, 242);
+		color: rgb(107, 114, 119);
+	}
+	.list-group-item {
+	      padding-top: 5px;
+	      padding-bottom: 5px;
+	}	
+</style>
+<body>
+	<header th:replace="~{plantillas/principal :: header}"></header>
+	
+	<div class="container py-4">
+
+		<div class="card bg-light">
+			<div class="card-header">
+				<h4 class="text-secondary" th:text="${titulo}"></h4>
+			</div>
+			<div class="card-body shadow-lg p-3">
+				<h4 class="card-title text-end">
+					<a class="btn btn-light text-success" style="color: darkgreen" 
+						th:href="@{/comercial/clienteconsultar/} + ${factura.cliente.id}">&laquo; regresar al cliente</a>
+				</h4>
+				
+				<ul class="list-group my-2">
+					<li class="list-group-item list-group-item font-weight-bold texto-sub-li">
+						<span>Información de la factura</span>
+					</li>
+					<li class="list-group-item"><b>Cliente: </b><i th:text="${factura.cliente.nombreCompleto}"></i></li>
+					<li class="list-group-item"><b>Correo electrónico: </b><i th:text="${factura.cliente.correoElectronico}"></i></li>
+					<li class="list-group-item"><b>Teléfono: </b><i th:text="${factura.cliente.telefono}"></i></li>
+					<li class="list-group-item"><b>Fecha de la venta: </b><i th:text="${#dates.format(factura.fechaVenta, 'dd/MM/yyyy')}"></i></li>
+				</ul>
+				
+				<div class="alert alert-info my-4" th:if="${#lists.isEmpty(factura.detalles)}" 
+					th:text="'La factura -' + ${factura.descripcion} + '- no tiene detalles.'"></div>
+				
+				<table class="table table-striped table-sm table-bordered table-hover" 
+					th:if="${not #lists.isEmpty(factura.detalles)}">
+					<thead>
+						<tr class="text-center">
+							<th>Producto</th>
+							<th>Cantidad</th>
+							<th>Precio</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="det : ${factura.detalles}">
+							<td th:text="${det.producto.descripcion}"></td>
+							<td class="text-end pr-3" th:text="${det.cantidad}"></td>
+							<td class="text-end pr-3" 
+								th:text="${#numbers.formatDecimal(det.producto.precio, 0, 'COMMA', 1, 'POINT')}"></td>
+							<td class="text-end pr-3" 	
+								th:text="${#numbers.formatDecimal(det.subtotalDetalle(), 0, 'COMMA', 1, 'POINT')}"></td>
+						</tr>
+						<tr>
+							<th colspan="3" class="text-end pr-3" th:text="'Total:'"></th>
+							<th class="text-end pr-3" 
+								th:text="${#numbers.formatDecimal(factura.subtotal, 0, 'COMMA', 1, 'POINT')}"></th>
+						</tr>
+					</tbody>
+				</table>
+				
+				<ul th:if="${not #lists.isEmpty(factura.detalles)}"
+					class="list-group my-2">
+					<li class="list-group-item list-group-item font-weight-bold texto-sub-li">
+						<span>Observaciones</span>
+					</li>
+					<li th:text="${factura.observacion}" class="list-group-item" 
+						th:if="${not #strings.isEmpty(factura.observacion)}"></li>
+					<li th:text="'Sin observaciones !'" th:if="${#strings.isEmpty(factura.observacion)}" 
+						class="list-group-item text-muted font-weight-bold"></li>
+				</ul>
+							
+			</div>
+		</div>
+	</div>
+	<footer th:replace="~{plantillas/principal :: footer}"></footer>	
+</body>
+</html>

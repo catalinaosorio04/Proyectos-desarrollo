@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es" xmlns:src="http://22.thymeleaf.org/extras/spring-security">
+
+<head th:replace="~{plantillas/principal :: head}"></head>
+
+<body>
+    <header th:replace="~{plantillas/principal :: header}"></header>
+
+    <div class="container py-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h3 class="text-secondary" th:text="${titulo}"></h3>
+            </div>
+            <div class="card-body shadow-lg p-3">
+                <h4 class="card-title" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <!-- <h4 class="card-title d-flex justify-content-between align-items-center">
+                        <a class="btn btn-primary btn-sm" th:href="@{/comercial/reporte-categorias-pdf}"
+                            target="_blank">Ver
+                            PDF</a>
+                    </h4> -->
+                    <h4 class="card-title d-flex justify-content-end align-items-center">
+                        <a class="btn btn-primary btn-sm" th:href="@{/comercial/reporte-categorias-pdf}"
+                            target="_blank">Ver PDF</a>
+                    </h4>
+                </h4>
+
+                <table class="table table-striped table-sm" th:if="${not #lists.isEmpty(categoriasPage.content)}">
+                    <thead>
+                        <tr>
+                            <th sec:authorize="hasRole('ROLE_USER')">Id.</th>
+                            <th>Descripción</th>
+                            <th>Ubicación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cat : ${categoriasPage.content}">
+
+                            <td sec:authorize="hasRole('ROLE_USER')"><a
+                                    th:href="@{/comercial/categoriaconsultar/} + ${cat.id}"
+                                    th:text="${#numbers.formatInteger(cat.id, 3)}"
+                                    class="btn btn-outline-secondary btn-xs"></a></td>
+                            <!-- <td>
+                                <a th:href="@{/comercial/categoriaconsultar/} + ${cat.id}"
+                                   th:text="${#numbers.formatInteger(cat.id, 3)}" class="btn btn-outline-secondary btn-xs"></a>
+                            </td> -->
+                            <td th:text="${cat.descripcion}"></td>
+                            <td th:text="${cat.ubicacion}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <nav th:if="${categoriasPage.totalPages > 1}">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${categoriasPage.first} ? 'disabled'">
+                            <a class="page-link"
+                                th:href="@{/comercial/categoriaslistar(page=0, size=${categoriasPage.size})}">Primera</a>
+                        </li>
+                        <li class="page-item" th:classappend="${categoriasPage.hasPrevious()} ? '' : 'disabled'">
+                            <a class="page-link"
+                                th:href="@{/comercial/categoriaslistar(page=${categoriasPage.number - 1}, size=${categoriasPage.size})}">Anterior</a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(0, categoriasPage.totalPages - 1)}"
+                            th:classappend="${categoriasPage.number == i} ? 'active'">
+                            <a class="page-link"
+                                th:href="@{/comercial/categoriaslistar(page=${i}, size=${categoriasPage.size})}"
+                                th:text="${i + 1}"></a>
+                        </li>
+                        <li class="page-item" th:classappend="${categoriasPage.hasNext()} ? '' : 'disabled'">
+                            <a class="page-link"
+                                th:href="@{/comercial/categoriaslistar(page=${categoriasPage.number + 1}, size=${categoriasPage.size})}">Siguiente</a>
+                        </li>
+                        <li class="page-item" th:classappend="${categoriasPage.last} ? 'disabled'">
+                            <a class="page-link"
+                                th:href="@{/comercial/categoriaslistar(page=${categoriasPage.totalPages - 1}, size=${categoriasPage.size})}">Última</a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="alert alert-warning" th:if="${#lists.isEmpty(categoriasPage.content)}">No hay categorías
+                    para mostrar</div>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="~{plantillas/principal :: footer}"></footer>
+</body>
+
+</html>

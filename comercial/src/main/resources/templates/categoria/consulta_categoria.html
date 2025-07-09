@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{plantillas/principal :: head}"></head>
+<style>
+	.list-group-item {
+	      padding-top: 5px;
+	      padding-bottom: 5px;
+	}
+</style>
+<body>
+	<header th:replace="~{plantillas/principal :: header}"></header>
+
+	<div class="container  py-4">
+
+		<div class="card bg-light">
+			<div class="card-header">
+				<h3 class="text-secondary" th:text="${titulo}"></h3>
+			</div>
+			<div class="card-body shadow-lg p-3">
+				<h4 class="card-title"></h4>
+				<ul class="list-group">
+					<li class="list-group-item"><b>Id: </b> <i th:text="${categoria.id}"></i></li>
+					<li class="list-group-item"><b>Descripción: </b> <i th:text="${categoria.descripcion}"></i></li>
+					<li class="list-group-item"><b>Ubicación: </b> <i th:text="${categoria.ubicacion}"></i></li>
+				</ul>
+
+				<table class="table table-striped table-sm mt-3" th:if="${not #lists.isEmpty(categoria.productos)}">
+					<tr>
+						<th>Id.</th>
+						<th>Descripción</th>
+						<th>Existencia</th>
+						<th>Precio</th>
+						<th class="text-center">Acciones</th>
+					</tr>
+					<tr th:each="prod : ${categoria.productos}">
+						<td th:text="${#numbers.formatInteger(prod.id, 3)}"></td>
+						<td th:text="${prod.descripcion}"></td>
+						<td th:text="${#numbers.formatInteger(prod.existencia, 1, 'POINT')}"></td>
+						<td th:text="${#numbers.formatDecimal(prod.precio, 1, 'POINT', 1, 'COMMA')}"></td>
+						<td class="text-center">
+							<a th:href="@{/comercial/productomodificar/} + ${prod.id}" title="editar">
+								<i class="bi-pencil-fill" style="color: cornflowerblue"></i></a>&nbsp;
+							<a th:href="@{/comercial/productoeliminar/} + ${prod.id}" title="eliminar"
+								onclick="return confirm('Está seguro de elminar el cliente ?')">
+								<i class="bi-eraser-fill" style="color: indianred"></i></a>
+						</td>
+					</tr>
+				</table>
+				<div class="alert alert-warning mt-3" th:if="${#lists.isEmpty(categoria.productos)}">No hay productos para mostrar de la categoría <span th:text="${categoria.descripcion}"></span></div>				
+
+				<div class="text-right mt-3">
+					<a th:href="@{/comercial/categoriaslistar}" class="btn btn-sm btn-light">&laquo; regresar</a>
+				</div> 
+			</div>
+		</div>
+	</div>
+	<footer th:replace="~{plantillas/principal :: footer}"></footer>
+</body>
+
+</html>

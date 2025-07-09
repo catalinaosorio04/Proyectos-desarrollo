@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{plantillas/principal :: head}"></head>
+<body>
+	<header th:replace="~{plantillas/principal :: header}"></header>
+	<div class="container  py-4">
+
+		<div class="card bg-light">
+			<div class="card-header">
+				<h3 class="text-secondary" th:text="${titulo}"></h3>
+			</div>
+			<div class="card-body shadow-lg p-3">
+				<h4 class="card-title text-end">
+                    <a th:href="@{/comercial/clienteconsultar/} + ${documento.cliente.id}" class="btn btn-sm btn-light" >&laquo; regresar al cliente</a>
+                </h4>
+				<form th:action="@{/comercial/documentoguardar}" th:object="${documento}" method="post" enctype="multipart/form-data">
+
+					<div class="mb-3">
+						<label class="form-label">Descripción del Archivo</label> 
+						<input type="text" th:field="*{descripcion}" class="form-control form-control-sm" />
+						<small class="form-text text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></small>
+					</div>
+
+					<div class="mb-3">
+						<label for="formFile" class="form-label">Archivo</label>
+						<input type="file" class="form-control" id="formFile" name="filedoc">
+					</div>
+<!-- 
+					<div class="mb-3">
+						<label>Fecha Carga</label>
+						<input type="text" th:field="*{fechaCarga}" class="form-control form-control-sm"
+							placeholder="dd/mm/aaaa" />
+						<small class="form-text text-danger" th:if="${#fields.hasErrors('fechaCarga')}"
+							th:errors="*{fechaCarga}"></small>
+					</div> -->
+
+					<div class="mb-3 row mt-4">
+						<div class="col-sm-6">
+							<input type="submit" th:value="${btn_accion}" class="btn btn-outline-secondary"/>
+						</div>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="~{plantillas/principal :: footer}"></footer>
+</body>
+</html>        

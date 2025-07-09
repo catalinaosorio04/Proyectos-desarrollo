@@ -1,0 +1,18 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="es" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{plantillas/principal :: head}"></head>
+<body>
+	<header th:replace="~{plantillas/principal :: header}"></header>
+	<div class="container py-4 ">
+		<div class="card bg-danger text-white">
+			<div class="card-header">
+				<h3 class="text-white" th:text="'Error: Acceso denegado !!'"></h3>
+			</div>
+			<div class="card-body">
+				<h4>El usuario <i sec:authentication="name"></i> no tiene permisos para acceder a este recurso.</h4>
+				<a th:href="@{/}" th:text="'Ir al inicio'" class="btn btn-outline-light" role="button"></a>
+			</div>
+		</div>
+	</div>
+	<footer th:replace="~{plantillas/principal :: footer}"></footer>
+</body>
+</html>

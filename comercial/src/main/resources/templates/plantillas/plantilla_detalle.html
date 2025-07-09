@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+<table th:fragment="detalle_factura" class="d-none">
+	<tbody id="plantilla_detalle">
+		<tr id="fila_{ID}">
+			<td class="d-none align-middle">
+				<input type="hidden" value="{ID}" name="detalle_id[]"/>
+			</td>
+			<td class="align-middle">{DESCRIPCION}</td>
+			<td class="align-middle text-end">{PRECIO}</td>
+			<td class="align-middle center-input">
+				<input type="number" value="1" name="cantidad[]" min="1" id="cantidad_{ID}" style="width: 100px"
+					class="form-control form-control-sm text-end" onchange="utils.calcularSubtotalDetalle ({ID}, {PRECIO}, this.value)"/>
+			</td>
+			<td class="align-middle text-end"><span id="subtotal_detalle_{ID}">0</span></td>
+			<td class="align-middle text-center"><a href="#" onclick="utils.eliminarDetalle({ID})" title="eliminar">
+				<i class="bi-trash" style="color: indianred"></i></a>
+			</td>
+			
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

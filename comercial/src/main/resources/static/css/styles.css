@@ -1,0 +1,62 @@
+.cw-90 { width: 90%; }
+.cw-80 { width: 80%; }
+.cw-70 { width: 70%; }
+.cw-60 { width: 60%; }
+.cw-50 { width: 50%; }
+
+.text-orange {
+    color: #fb6242;
+}
+
+.btn-orange {
+    background-color: #fb795e; /* Color de fondo personalizado */
+    border-color: #fb6242; /* Color de borde personalizado */
+    color: white; /* Color del texto */
+    padding: 0.5rem 1rem; /* Espaciado interno */
+    border-radius: 0.25rem; /* Bordes redondeados */
+    transition: background-color 0.3s; /* Animación suave al pasar el ratón */
+}
+
+.btn-orange:hover {
+    background-color: #fb6242; /* Color de fondo al pasar el ratón */
+    color: #831903;
+}
+
+.btn-group-xs>.btn, .btn-xs {
+  padding: .5rem .5rem;
+  font-size: .875rem;
+  line-height: .5;
+  border-radius: .2rem;
+}
+
+.logo {
+  width: 240px;
+}
+
+.icono {
+  width: 50px;
+}
+
+.sugerencias-list {
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute; /* aparecer sobre otros elementos */
+  z-index: 1000;
+  background-color: white;
+}
+
+.sugerencia-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.sugerencia-item:hover {
+  background-color: #f0f0f0;
+}
+
+.center-input {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* alinear verticalmente */
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+    <nav th:fragment="pager">
+        <ul class="pagination pagination-sm justify-content-center">
+            <li class="page-item" th:class="${pageRender.first ? 'page-item disabled' : 'page-item'}">
+                <span class="page-link" th:if="${pageRender.first}"><i class="bi-chevron-double-left"></i></span>
+                <a class="page-link" th:href="@{${pageRender.url}(pag=0)}" th:if="${not pageRender.first}"><i class="bi-chevron-double-left"></i></a>
+            </li>
+
+            <li class="page-item" th:class="${not pageRender.hasPrevious ? 'page-item disabled' : 'page-item'}">
+                <span class="page-link" th:if="${not pageRender.hasPrevious}"><i class="bi-chevron-left"></i></span>
+                <a class="page-link" th:href="@{${pageRender.url}(pag=${pageRender.paginaActual - 2})}" th:if="${pageRender.hasPrevious}"><i class="bi-chevron-left"></i></a>
+            </li>
+
+            <li class="page-item" th:each="item : ${pageRender.paginas}" th:class="${item.actual ? 'page-item active' : 'page-item'}">
+                <span class="page-link" th:if="${item.actual}" th:text="${item.numero}"></span>
+                <a class="page-link" th:href="@{${pageRender.url}(pag=${item.numero - 1})}" th:if="${not item.actual}" th:text="${item.numero}"></a>
+            </li>
+
+            <li class="page-item" th:class="${not pageRender.hasNext ? 'page-item disabled' : 'page-item'}">
+                <span class="page-link" th:if="${not pageRender.hasNext}"><i class="bi-chevron-right"></i></span>
+                <a class="page-link" th:href="@{${pageRender.url}(pag=${pageRender.paginaActual})}" th:if="${pageRender.hasNext}"><i class="bi-chevron-right"></i></a>
+            </li>
+
+            <li class="page-item" th:class="${pageRender.last ? 'page-item disabled' : 'page-item'}">
+                <span class="page-link" th:if="${pageRender.last}"><i class="bi-chevron-double-right"></i></span>
+                <a class="page-link" th:href="@{${pageRender.url}(pag=${pageRender.totalPaginas - 1})}" th:if="${not pageRender.last}"><i class="bi-chevron-double-right"></i></a>
+            </li>
+        </ul>
+    </nav>
+</body>
+</html>

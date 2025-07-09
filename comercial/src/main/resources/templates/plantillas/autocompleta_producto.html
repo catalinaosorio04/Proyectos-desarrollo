@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+<script th:fragment="script">
+
+    // El evento  DOMContentLoaded se activa cuando el documento HTML se ha analizado por completo 
+    // y todos los scripts diferidos (menos imágenes, css, iframes, scripts asyncronos) se han descargado y ejecutado.
+    document.addEventListener('DOMContentLoaded', function(){
+        const buscarProducto = document.getElementById('buscar_producto'); // obtiene el input 'buscar_producto'
+        const sugerencias = document.getElementById('sugerencias'); // obtiene el div sugerencias
+
+        // asigna un evento input a buscarProducto
+        buscarProducto.addEventListener('input', function() {
+            const term = buscarProducto.value;
+
+            if (term.length === 0) {
+                sugerencias.style.display = 'none';
+                return; // Evita hacer la petición si está vacío
+            }
+
+            fetch(`/comercial/cargarproductos/${term}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Por simplicidad, solo puedes mostrar un dropdown de sugerencias
+                    mostrarSugerencias(data);
+                })
+                .catch(error => console.error('Error recuperando productos:', error));
+        });
+        
+        // llena y muestra la caja de sugerencias
+        function mostrarSugerencias(data) {
+            sugerencias.innerHTML = ''; // Limpiar sugerencias anteriores
+            if (data.length === 0) {
+                sugerencias.style.display = 'none';
+                return;
+            }
+    
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('sugerencia-item');
+                div.textContent = item.descripcion;
+                div.addEventListener('click', function() {
+                    selectSugerencia(item);
+                });
+                sugerencias.appendChild(div);
+            });
+    
+            sugerencias.style.display = 'block';
+        } 
+        
+        function selectSugerencia(item) {
+            // validar al agregar un producto
+            if (!item.id || !item.descripcion || item.precio <= 0) {
+                alert("Producto inválido. Por favor selecciona un producto válido.");
+                return;
+            }
+            
+            buscarProducto.value = item.descripcion; // Asigna la descripción al input
+
+            if (utils.existeDetalle(item.id)) {
+                utils.incrementarCantidad(item.id, item.precio);
+                return;
+            }            
+
+            let detalle = document.getElementById("plantilla_detalle").innerHTML;
+            detalle = detalle.replace(/{ID}/g, item.id);
+            detalle = detalle.replace(/{DESCRIPCION}/g, item.descripcion);
+            detalle = detalle.replace(/{PRECIO}/g, item.precio);
+            document.querySelector("#cargar_detalle tbody").insertAdjacentHTML('beforeend', detalle);
+
+            utils.calcularSubtotalDetalle(item.id, item.precio, 1);
+
+            buscarProducto.value = '';
+            buscarProducto.focus(); // select();
+            
+
+            sugerencias.style.display = 'none'; // Oculta las sugerencias
+        }
+
+        // Cierra el div de sugerencias si se hace clic fuera
+        document.addEventListener('click', function(event) {
+            if (!sugerencias.contains(event.target) && event.target !== buscarProducto) {
+                sugerencias.style.display = 'none';
+            }
+        });
+
+        // eliminar el detalle sobrante (plantilla_detalle)
+        document.querySelector("form").addEventListener('submit', function() {
+            document.getElementById("plantilla_detalle").remove();
+            return;
+        }); 
+
+    });
+
+    let utils = {
+        calcularSubtotalDetalle: function(id, precio, cantidad) {
+            document.getElementById("subtotal_detalle_" + id).innerHTML = parseFloat(precio) * parseInt(cantidad);
+            this.calcularSubtotalFactura();
+        },
+
+        existeDetalle: function(id) {
+            let res = false;
+            const detalleIds = document.querySelectorAll('input[name="detalle_id[]"]');
+            detalleIds.forEach(function(input) {
+                if (parseInt(id) === parseInt(input.value)) {
+                    res = true;
+                }
+            });
+            return res;
+        },
+
+        incrementarCantidad: function(id, precio) {
+            let cantidadInput = document.getElementById("cantidad_" + id);
+            let cantidad = cantidadInput.value ? cantidadInput.value : 0;
+
+            cantidadInput.value = ++cantidad;
+            this.calcularSubtotalDetalle(id, precio, cantidad);
+        },
+        
+        eliminarDetalle: function(id) {
+            document.getElementById("fila_" + id).remove();
+            this.calcularSubtotalFactura();
+        },
+
+        calcularSubtotalFactura: function() {
+            let subtotal = 0;
+            const subtotales = document.querySelectorAll('span[id^="subtotal_detalle_"]');
+            subtotales.forEach(function(span) {
+                subtotal += parseInt(span.innerHTML);
+            });
+            document.getElementById("subtotal_factura").innerHTML = subtotal;
+        }
+        
+    };
+</script>
+</body>
+</html> 
