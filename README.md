@@ -1,4 +1,4 @@
-# 💻 Repositorio de Proyectos de Desarrollo Backend
+# 💻 Repositorio de Proyectos de Desarrollo
 
 Este repositorio agrupa diversos proyectos desarrollados como parte de la práctica, estudio y mejora continua en el área de desarrollo de software backend. Se incluyen aplicaciones empresariales, APIs REST, sistemas de gestión y automatización, principalmente usando tecnologías del ecosistema **Java**.
 
